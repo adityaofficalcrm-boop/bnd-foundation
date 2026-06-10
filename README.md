@@ -51,8 +51,8 @@ npm run dev
 ```
 
 - Frontend: http://localhost:5173
-- Backend API: http://localhost:5000/api
-- Health check: http://localhost:5000/api/health
+- Backend API: http://localhost:5000/api/v1
+- Health check: http://localhost:5000/api/v1/health
 
 ## Scripts
 
@@ -71,12 +71,29 @@ npm run dev
 | Phase | Scope | Status |
 | ----- | ----- | ------ |
 | 1 | Monorepo setup | ✅ Complete |
-| 2 | Backend architecture | Pending |
+| 2 | Backend architecture | ✅ Complete |
 | 3 | Authentication | Pending |
 | 4 | Public website | Pending |
 | 5+ | Admin, CMS, modules | Pending |
 
 See [PROJECT_REQUIREMENTS.md](./PROJECT_REQUIREMENTS.md) for full specifications.
+
+## Backend Architecture (Phase 2)
+
+```
+backend/src/
+├── config/           # Env validation + app config + MongoDB connection
+├── controllers/      # HTTP layer (extends BaseController)
+├── services/         # Business logic (extends BaseService)
+├── repositories/     # Data access (extends BaseRepository)
+├── routes/v1/        # Versioned API routes
+├── middleware/       # Validation, error handling
+├── errors/           # Custom HTTP error classes
+├── utils/            # Logger, ApiResponse, validation helpers
+└── types/            # Shared TypeScript types
+```
+
+All API endpoints are served under `/api/v1`.
 
 ## Deployment Targets
 

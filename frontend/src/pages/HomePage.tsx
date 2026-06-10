@@ -8,7 +8,7 @@ export function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 px-4">
       <div className="max-w-xl space-y-3 text-center">
-        <p className="text-sm font-medium uppercase tracking-wide text-primary">Phase 1</p>
+        <p className="text-sm font-medium uppercase tracking-wide text-primary">Phase 2</p>
         <h1 className="text-4xl font-bold tracking-tight">{env.VITE_APP_NAME}</h1>
         <p className="text-muted-foreground">
           Monorepo foundation is ready. Public pages, admin dashboard, and CMS modules will be
@@ -27,7 +27,7 @@ export function HomePage() {
         )}
         {data && (
           <p className="text-sm text-muted-foreground">
-            {data.service} — {data.status} ({data.timestamp})
+            {data.service} v{data.version} — {data.status} (DB: {data.database.state})
           </p>
         )}
         <Button className="mt-4" variant="outline" size="sm" onClick={() => void refetch()}>

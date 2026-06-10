@@ -1,20 +1,26 @@
 import 'dotenv/config';
 
 import { createApp } from './app.js';
+import { appConfig } from './config/app.config.js';
 import { connectDatabase, disconnectDatabase } from './config/database.js';
-import { env } from './config/env.js';
+import { logger } from './utils/logger.js';
 
 async function bootstrap() {
   await connectDatabase();
 
   const app = createApp();
 
-  const server = app.listen(env.PORT, () => {
-    console.info(`[server] Running on port ${env.PORT} (${env.NODE_ENV})`);
+  const server = app.listen(appConfig.port, () => {
+    logger.info('Server started', {
+      port: appConfig.port,
+      environment: appConfig.env,
+      apiPrefix: appConfig.apiPrefix,
+    });
   });
 
   const shutdown = async (signal: string) => {
-    console.info(`[server] Received ${signal}, shutting down...`);
+    logger.info('Shutdown signal received', { signal });
+
     server.close(async () => {
       await disconnectDatabase();
       process.exit(0);
@@ -26,6 +32,8 @@ async function bootstrap() {
 }
 
 bootstrap().catch((error) => {
-  console.error('[server] Failed to start:', error);
+  logger.error('Failed to start server', {
+    error: error instanceof Error ? error.message : 'Unknown error',
+  });
   process.exit(1);
 });
