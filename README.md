@@ -65,6 +65,22 @@ npm run dev
 | `npm run lint` | Lint all workspaces |
 | `npm run format` | Format code with Prettier |
 | `npm run typecheck` | Type-check all workspaces |
+| `npm run seed -w backend` | Seed the first SUPER_ADMIN user |
+
+## Auth API (Phase 3)
+
+| Method | Endpoint | Auth | Description |
+| ------ | -------- | ---- | ----------- |
+| POST | `/api/v1/auth/login` | No | Admin login |
+| POST | `/api/v1/auth/refresh` | No | Refresh access token |
+| POST | `/api/v1/auth/logout` | No | Revoke refresh token |
+| GET | `/api/v1/auth/me` | Bearer | Get current admin user |
+
+**Roles:** `SUPER_ADMIN`, `ADMIN` — no public registration. Seed the first super admin:
+
+```bash
+npm run seed -w backend
+```
 
 ## Development Phases
 
@@ -72,7 +88,7 @@ npm run dev
 | ----- | ----- | ------ |
 | 1 | Monorepo setup | ✅ Complete |
 | 2 | Backend architecture | ✅ Complete |
-| 3 | Authentication | Pending |
+| 3 | Authentication | ✅ Complete |
 | 4 | Public website | Pending |
 | 5+ | Admin, CMS, modules | Pending |
 

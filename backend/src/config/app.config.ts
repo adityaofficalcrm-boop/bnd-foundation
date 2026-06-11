@@ -28,6 +28,18 @@ export const appConfig = {
   bodyParser: {
     jsonLimit: '1mb',
   },
+  jwt: {
+    accessSecret: env.JWT_ACCESS_SECRET,
+    refreshSecret: env.JWT_REFRESH_SECRET,
+    accessExpiresIn: env.JWT_ACCESS_EXPIRES_IN,
+    refreshExpiresIn: env.JWT_REFRESH_EXPIRES_IN,
+  },
+  seed: {
+    superAdminEmail: env.SEED_SUPER_ADMIN_EMAIL,
+    superAdminPassword: env.SEED_SUPER_ADMIN_PASSWORD,
+    superAdminFirstName: env.SEED_SUPER_ADMIN_FIRST_NAME,
+    superAdminLastName: env.SEED_SUPER_ADMIN_LAST_NAME,
+  },
 } as const;
 
 export type AppConfig = typeof appConfig;
