@@ -89,8 +89,9 @@ npm run seed -w backend
 | 1 | Monorepo setup | ✅ Complete |
 | 2 | Backend architecture | ✅ Complete |
 | 3 | Authentication | ✅ Complete |
-| 4 | Public website | Pending |
-| 5+ | Admin, CMS, modules | Pending |
+| 4 | Admin panel foundation | ✅ Complete |
+| 5 | Public website | Pending |
+| 6+ | CMS, modules | Pending |
 
 See [PROJECT_REQUIREMENTS.md](./PROJECT_REQUIREMENTS.md) for full specifications.
 
@@ -110,6 +111,25 @@ backend/src/
 ```
 
 All API endpoints are served under `/api/v1`.
+
+## Admin Panel (Phase 4)
+
+| Route | Description |
+| ----- | ----------- |
+| `/login` | Admin sign-in |
+| `/admin` | Protected dashboard home |
+
+**Auth behavior:**
+- Access token stored in memory (React context + session module)
+- Refresh token stored in `localStorage`
+- Axios interceptor attaches Bearer token and refreshes once on 401
+- Unauthenticated users redirect to `/login`
+- Role-based nav filtering via `RoleProtectedRoute` component
+
+**Test login** (after seeding backend):
+- URL: http://localhost:5173/login
+- Email: `admin@bndfoundation.org`
+- Password: `ChangeMe123!`
 
 ## Deployment Targets
 

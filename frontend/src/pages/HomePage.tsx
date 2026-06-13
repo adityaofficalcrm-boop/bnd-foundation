@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { env } from '@/config/env';
 import { useHealthCheck } from '@/hooks/useHealthCheck';
@@ -8,11 +9,14 @@ export function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 px-4">
       <div className="max-w-xl space-y-3 text-center">
-        <p className="text-sm font-medium uppercase tracking-wide text-primary">Phase 2</p>
+        <p className="text-sm font-medium uppercase tracking-wide text-primary">Public Site</p>
         <h1 className="text-4xl font-bold tracking-tight">{env.VITE_APP_NAME}</h1>
         <p className="text-muted-foreground">
-          Monorepo foundation is ready. Public pages, admin dashboard, and CMS modules will be
-          added in later phases.
+          Public website pages will be built in a future phase. The admin panel is available at{' '}
+          <Link to="/login" className="text-primary hover:underline">
+            /login
+          </Link>
+          .
         </p>
       </div>
 
@@ -30,9 +34,14 @@ export function HomePage() {
             {data.service} v{data.version} — {data.status} (DB: {data.database.state})
           </p>
         )}
-        <Button className="mt-4" variant="outline" size="sm" onClick={() => void refetch()}>
-          Retry
-        </Button>
+        <div className="mt-4 flex flex-wrap justify-center gap-2">
+          <Button variant="outline" size="sm" onClick={() => void refetch()}>
+            Retry
+          </Button>
+          <Button asChild size="sm">
+            <Link to="/login">Admin Login</Link>
+          </Button>
+        </div>
       </div>
     </main>
   );
