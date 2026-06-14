@@ -1,12 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { HeartHandshakeIcon, Loader2Icon } from 'lucide-react';
+import { HeartHandshakeIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
+import { AppButton, AppInput } from '@/components/app';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { loginSchema, type LoginFormValues } from '@/features/auth/schemas/login.schema';
 import { env } from '@/config/env';
@@ -44,7 +42,7 @@ export function LoginPage() {
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
-      <div className="hidden flex-1 flex-col justify-between border-r bg-primary/5 p-10 lg:flex">
+      <div className="hidden flex-1 flex-col justify-between border-r bg-surface p-10 lg:flex">
         <div className="flex items-center gap-3 text-primary">
           <HeartHandshakeIcon className="size-8" />
           <span className="text-lg font-semibold">{env.VITE_APP_NAME}</span>
@@ -61,8 +59,8 @@ export function LoginPage() {
         <p className="text-sm text-muted-foreground">Authorized personnel only. No public registration.</p>
       </div>
 
-      <div className="flex flex-1 items-center justify-center p-6">
-        <Card className="w-full max-w-md border shadow-lg">
+      <div className="flex flex-1 items-center justify-center p-4 md:p-6">
+        <Card className="w-full max-w-md border shadow-elevated">
           <CardHeader className="space-y-2">
             <div className="flex items-center gap-2 text-primary lg:hidden">
               <HeartHandshakeIcon className="size-5" />
@@ -73,48 +71,38 @@ export function LoginPage() {
           </CardHeader>
           <CardContent>
             <form onSubmit={(event) => void onSubmit(event)} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  autoComplete="email"
-                  placeholder="admin@bndfoundation.org"
-                  {...register('email')}
-                />
-                {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
-              </div>
+              <AppInput
+                label="Email"
+                type="email"
+                autoComplete="email"
+                placeholder="admin@bndfoundation.org"
+                error={errors.email?.message}
+                required
+                {...register('email')}
+              />
 
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  autoComplete="current-password"
-                  placeholder="Enter your password"
-                  {...register('password')}
-                />
-                {errors.password && (
-                  <p className="text-sm text-destructive">{errors.password.message}</p>
-                )}
-              </div>
+              <AppInput
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+                placeholder="Enter your password"
+                error={errors.password?.message}
+                required
+                {...register('password')}
+              />
 
-              {error && (
-                <div className="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive">
+              {error ? (
+                <div
+                  className="rounded-md border border-destructive/20 bg-destructive/5 px-3 py-2 text-sm text-destructive"
+                  role="alert"
+                >
                   {error}
                 </div>
-              )}
+              ) : null}
 
-              <Button type="submit" className="w-full" disabled={isSubmitting}>
-                {isSubmitting ? (
-                  <>
-                    <Loader2Icon className="size-4 animate-spin" />
-                    Signing in...
-                  </>
-                ) : (
-                  'Sign in'
-                )}
-              </Button>
+              <AppButton type="submit" className="w-full" isLoading={isSubmitting}>
+                Sign in
+              </AppButton>
             </form>
 
             <p className="mt-6 text-center text-sm text-muted-foreground">

@@ -90,7 +90,9 @@ npm run seed -w backend
 | 2 | Backend architecture | ✅ Complete |
 | 3 | Authentication | ✅ Complete |
 | 4 | Admin panel foundation | ✅ Complete |
-| 5 | Public website | Pending |
+| 4.5 | Design system & UI kit | ✅ Complete |
+| 5 | CMS management | ✅ Complete |
+| 6 | Public website | ✅ Complete |
 | 6+ | CMS, modules | Pending |
 
 See [PROJECT_REQUIREMENTS.md](./PROJECT_REQUIREMENTS.md) for full specifications.
@@ -130,6 +132,68 @@ All API endpoints are served under `/api/v1`.
 - URL: http://localhost:5173/login
 - Email: `admin@bndfoundation.org`
 - Password: `ChangeMe123!`
+
+## Design System (Phase 4.5)
+
+Theme tokens and reusable admin components live under:
+
+- `frontend/src/design-system/` — theme configuration
+- `frontend/src/components/app/` — App UI kit (AppButton, AppInput, PageHeader, etc.)
+- `frontend/src/index.css` — global CSS design tokens
+
+See [DESIGN_SYSTEM.md](./DESIGN_SYSTEM.md) for brand guidelines.
+
+## CMS API (Phase 5)
+
+### Admin (authenticated)
+
+| Method | Endpoint | Auth | Description |
+| ------ | -------- | ---- | ----------- |
+| GET | `/api/v1/cms` | Admin | List CMS pages (search, filter, pagination) |
+| GET | `/api/v1/cms/:id` | Admin | Get CMS page by ID |
+| POST | `/api/v1/cms` | Admin | Create CMS page |
+| PUT | `/api/v1/cms/:id` | Admin | Update CMS page |
+| DELETE | `/api/v1/cms/:id` | Admin | Delete CMS page |
+
+### Public (no auth)
+
+| Method | Endpoint | Auth | Description |
+| ------ | -------- | ---- | ----------- |
+| GET | `/api/v1/cms/public` | None | All published CMS entries |
+| GET | `/api/v1/cms/public/:section` | None | Published CMS entries by section |
+
+**Sections:** `HOME`, `ABOUT_US`, `MISSION_VISION`, `CONTACT_INFO`, `FOOTER`
+
+Public responses omit internal admin fields (`createdBy`, `updatedBy`, `status`) and only include `PUBLISHED` records.
+
+**Admin UI:** http://localhost:5173/admin/cms
+
+## Public Website (Phase 6)
+
+| Route | CMS Section | API |
+| ----- | ----------- | --- |
+| `/` | `HOME` | `GET /api/v1/cms/public/HOME` |
+| `/about` | `ABOUT_US` | `GET /api/v1/cms/public/ABOUT_US` |
+| `/mission` | `MISSION_VISION` | `GET /api/v1/cms/public/MISSION_VISION` |
+| `/contact` | `CONTACT_INFO` | `GET /api/v1/cms/public/CONTACT_INFO` |
+
+Footer content loads from `GET /api/v1/cms/public/FOOTER`. All page content is fetched dynamically — nothing is hardcoded.
+
+**Homepage CMS slug conventions** (HOME section):
+
+| Slug pattern | Homepage section |
+| ------------ | ---------------- |
+| `hero` | Hero banner |
+| `stats-heading` | Impact statistics section title |
+| `stat-*` | Impact stat cards (`subheading` = value, `title` = label) |
+| `programs-heading` | Programs section title |
+| `program-*` | Program cards |
+| `team-heading` | Team section title |
+| `team-*` | Team member cards |
+| `gallery-heading` | Gallery section title |
+| `gallery-*` | Gallery preview items |
+
+**Public site:** http://localhost:5173/
 
 ## Deployment Targets
 
