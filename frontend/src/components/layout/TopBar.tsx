@@ -1,8 +1,7 @@
-import { BellIcon, ChevronDownIcon, LogOutIcon, SettingsIcon, UserIcon } from 'lucide-react';
+import { ChevronDownIcon, LogOutIcon, SettingsIcon, UserIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { BreadcrumbItem } from '@/components/app/PageHeader';
-import { AppButton } from '@/components/app/AppButton';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -12,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { AdminNotificationsMenu } from '@/components/layout/AdminNotificationsMenu';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { cn } from '@/lib/utils';
 import { env } from '@/config/env';
@@ -141,18 +141,7 @@ export function TopBar({ mobileTrigger, breadcrumbs }: TopBarProps) {
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <AppButton
-            variant="outline"
-            size="icon"
-            className="relative size-10 rounded-xl"
-            aria-label="Notifications"
-            title="Notifications (coming soon)"
-            disabled
-          >
-            <BellIcon className="size-4" />
-            <span className="absolute top-2 right-2 size-2 rounded-full bg-accent ring-2 ring-background" />
-            <span className="sr-only">New notifications placeholder</span>
-          </AppButton>
+          <AdminNotificationsMenu />
           <UserProfileDropdown />
         </div>
       </div>

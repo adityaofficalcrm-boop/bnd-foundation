@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { loginSchema, type LoginFormValues } from '@/features/auth/schemas/login.schema';
 import { env } from '@/config/env';
+import { flattenFormErrors, scrollToFirstFormError } from '@/lib/api-errors';
+import { toast } from '@/components/app';
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -29,16 +31,26 @@ export function LoginPage() {
     },
   });
 
-  const onSubmit = handleSubmit(async (values) => {
-    setError(null);
+  const onSubmit = handleSubmit(
+    async (values) => {
+      setError(null);
 
-    try {
-      await login(values.email, values.password);
-      navigate(redirectTo, { replace: true });
-    } catch {
-      setError('Invalid email or password. Please try again.');
-    }
-  });
+      try {
+        await login(values.email, values.password);
+        toast.success('Signed in successfully.');
+        navigate(redirectTo, { replace: true });
+      } catch {
+        const message = 'Invalid email or password. Please try again.';
+        setError(message);
+        toast.error(message);
+      }
+    },
+    (formErrors) => {
+      const messages = flattenFormErrors(formErrors);
+      toast.error(messages[0] ?? 'Please enter your email and password.');
+      scrollToFirstFormError();
+    },
+  );
 
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-background via-background to-primary/5">
@@ -70,7 +82,7 @@ export function LoginPage() {
             <CardDescription>Enter your credentials to access the admin panel.</CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={(event) => void onSubmit(event)} className="space-y-4">
+            <form onSubmit={(event) => void onSubmit(event)} className="space-y-4" noValidate>
               <AppInput
                 label="Email"
                 type="email"

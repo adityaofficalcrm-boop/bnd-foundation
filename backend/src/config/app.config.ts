@@ -40,6 +40,14 @@ export const appConfig = {
     superAdminFirstName: env.SEED_SUPER_ADMIN_FIRST_NAME,
     superAdminLastName: env.SEED_SUPER_ADMIN_LAST_NAME,
   },
+  recaptcha: {
+    secretKey: env.RECAPTCHA_SECRET_KEY ?? '',
+  },
+  stripe: {
+    secretKey: env.STRIPE_SECRET_KEY,
+    webhookSecret: env.STRIPE_WEBHOOK_SECRET,
+  },
+  frontendUrl: env.FRONTEND_URL,
 } as const;
 
 export type AppConfig = typeof appConfig;

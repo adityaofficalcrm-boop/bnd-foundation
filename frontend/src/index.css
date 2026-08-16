@@ -22,6 +22,7 @@
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
+  --color-primary-dark: var(--primary-dark);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -44,8 +45,9 @@
 }
 
 :root {
-  /* BND Foundation brand palette */
-  --primary: #0f4c81;
+  /* BND Foundation brand palette — primary matches bndfoundation.org (#436660) */
+  --primary: #436660;
+  --primary-dark: #324c48;
   --primary-foreground: #ffffff;
   --secondary: #2e8b57;
   --secondary-foreground: #ffffff;
@@ -67,7 +69,7 @@
   --surface: #f8fafc;
   --border: #e2e8f0;
   --input: #e2e8f0;
-  --ring: #0f4c81;
+  --ring: #436660;
   --sidebar: #f8fafc;
   --sidebar-foreground: #0f172a;
   --radius: 0.625rem;
@@ -81,10 +83,18 @@
   html {
     font-family: var(--font-sans);
     line-height: 1.5;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
+    overflow-x: hidden;
+  }
+
+  img,
+  video,
+  svg {
+    max-width: 100%;
   }
 
   h1,

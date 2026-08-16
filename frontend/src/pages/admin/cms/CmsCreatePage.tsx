@@ -1,16 +1,22 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { AppButton, PageHeader } from '@/components/app';
+import { AppButton, PageHeader, toast } from '@/components/app';
 import { CmsForm } from '@/features/cms/components/CmsForm';
 import { useCreateCmsPage } from '@/features/cms/hooks/useCmsQueries';
 import { toCmsPayload, type CmsFormValues } from '@/features/cms/schemas/cms.schema';
+import { getApiErrorMessage } from '@/lib/api-errors';
 
 export function CmsCreatePage() {
   const navigate = useNavigate();
   const createMutation = useCreateCmsPage();
 
   const handleSubmit = async (values: CmsFormValues) => {
-    await createMutation.mutateAsync(toCmsPayload(values));
-    navigate('/admin/cms');
+    try {
+      await createMutation.mutateAsync(toCmsPayload(values));
+      toast.success('Content created successfully.');
+      navigate('/admin/cms');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Failed to create content.'));
+    }
   };
 
   return (

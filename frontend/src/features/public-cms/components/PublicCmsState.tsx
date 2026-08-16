@@ -1,5 +1,6 @@
 import { AlertCircleIcon, RefreshCwIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AppButton, EmptyState, LoadingSkeleton } from '@/components/app';
 
 type PublicCmsStateProps = {
@@ -17,10 +18,13 @@ export function PublicCmsState({
   isError,
   isEmpty,
   onRetry,
-  emptyTitle = 'Content not available',
+  emptyTitle,
   emptyDescription = 'Published content for this page has not been added yet.',
   children,
 }: PublicCmsStateProps) {
+  const { t } = useTranslation();
+  const resolvedEmptyTitle = emptyTitle ?? t('common.contentUnavailable');
+
   if (isLoading) {
     return <LoadingSkeleton variant="page" rows={4} />;
   }
@@ -32,14 +36,14 @@ export function PublicCmsState({
         role="alert"
       >
         <AlertCircleIcon className="mx-auto size-10 text-destructive" aria-hidden="true" />
-        <h2 className="mt-4 text-lg font-semibold text-foreground">Unable to load content</h2>
+        <h2 className="mt-4 text-lg font-semibold text-foreground">{t('common.unableToLoad')}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           We could not retrieve page content from the server. Please try again.
         </p>
         {onRetry ? (
           <AppButton className="mt-6" variant="outline" onClick={onRetry}>
             <RefreshCwIcon className="size-4" />
-            Try again
+            {t('common.tryAgain')}
           </AppButton>
         ) : null}
       </div>
@@ -49,13 +53,13 @@ export function PublicCmsState({
   if (isEmpty) {
     return (
       <EmptyState
-        title={emptyTitle}
+        title={resolvedEmptyTitle}
         description={emptyDescription}
         action={
           onRetry ? (
             <AppButton variant="outline" onClick={onRetry}>
               <RefreshCwIcon className="size-4" />
-              Refresh
+              {t('common.refresh')}
             </AppButton>
           ) : undefined
         }

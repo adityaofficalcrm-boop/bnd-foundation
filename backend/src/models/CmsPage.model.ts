@@ -15,6 +15,15 @@ export interface ICmsMeta {
   socialTwitter?: string;
   socialInstagram?: string;
   socialLinkedin?: string;
+  socialYoutube?: string;
+  supportCredit?: string;
+  role?: string;
+  group?: string;
+  amount?: string;
+  location?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  grantProvider?: string;
 }
 
 export interface ICmsPage extends Document {
@@ -45,6 +54,15 @@ const cmsMetaSchema = new Schema<ICmsMeta>(
     socialTwitter: { type: String, trim: true },
     socialInstagram: { type: String, trim: true },
     socialLinkedin: { type: String, trim: true },
+    socialYoutube: { type: String, trim: true },
+    supportCredit: { type: String, trim: true, maxlength: 200 },
+    role: { type: String, trim: true, maxlength: 120 },
+    group: { type: String, trim: true, maxlength: 80 },
+    amount: { type: String, trim: true, maxlength: 50 },
+    location: { type: String, trim: true, maxlength: 200 },
+    ctaLabel: { type: String, trim: true, maxlength: 120 },
+    ctaUrl: { type: String, trim: true, maxlength: 500 },
+    grantProvider: { type: String, trim: true, maxlength: 200 },
   },
   { _id: false },
 );

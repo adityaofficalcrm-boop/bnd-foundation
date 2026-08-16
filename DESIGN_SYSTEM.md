@@ -24,7 +24,7 @@ Avoid:
 ## Color Palette
 
 Primary:
-#0F4C81
+#436660
 
 Secondary:
 #2E8B57

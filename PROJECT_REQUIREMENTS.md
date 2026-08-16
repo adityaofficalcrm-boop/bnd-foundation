@@ -35,10 +35,10 @@ The application should be modern, scalable, responsive, and easy for non-technic
 2. Create Admin Dashboard.
 3. Create Donation Management System.
 4. Create Campaign Management System.
-5. Create Team Management System.
-6. Create Gallery Management System.
-7. Support Multiple Languages.
-8. Make all content manageable from Admin Panel.
+5. Create Team Management System *(done via CMS — Admin → Team lists `team-*` entries)*.
+6. Create Gallery Management System *(local uploads; few images + short videos)*.
+7. Support Multiple Languages *(optional / later)*.
+8. Make all content manageable from Admin Panel (Super Admin).
 9. Create scalable architecture for future growth.
 
 ---
@@ -49,9 +49,7 @@ Project Type:
 
 * Non-Profit Organization
 
-Budget:
 
-* NPR 50,000
 
 Priority:
 
@@ -116,7 +114,10 @@ Improve UX while maintaining branding.
 
 ## Storage
 
-* Cloudinary
+* Local files on the backend (`backend/uploads/`), served at `/uploads/...`
+* **Do not use Cloudinary** — volume is small (a few images + ~4–5 short videos)
+* Images and short videos stored on the same server / disk as the API
+* Keep file size limits reasonable (images already capped; extend for short video when gallery/media supports video)
 
 ## Database
 
@@ -148,19 +149,10 @@ Domain:
 
 Can:
 
-* Manage entire platform
-* Manage admins
-* Manage settings
+* Manage entire platform (CMS, contact, donations, future modules)
+* Manage settings when built
 
-## Admin
-
-Can:
-
-* Manage content
-* Manage campaigns
-* Manage members
-* Manage gallery
-* View donations
+**Out of scope:** creating/managing additional Admin users.
 
 ## Public User
 
@@ -169,7 +161,7 @@ Can:
 * Browse website
 * Contact foundation
 * Donate
-* Apply as volunteer
+* Apply as volunteer (when built)
 
 ---
 
@@ -343,7 +335,7 @@ Admin can:
 
 Storage:
 
-* Cloudinary
+* Local backend disk (`/uploads`) — not Cloudinary
 
 ---
 
@@ -409,9 +401,9 @@ Languages:
 
 Requirements:
 
-* Language Switcher
-* Persistent Language Selection
-* i18next Integration
+* Language Switcher ✅
+* Persistent Language Selection ✅ (localStorage)
+* i18next Integration ✅ (English default + Nepali for public UI chrome / forms; CMS page bodies remain as authored)
 
 Future Languages:
 

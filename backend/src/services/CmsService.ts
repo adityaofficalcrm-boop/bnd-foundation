@@ -5,6 +5,63 @@ import { cmsRepository, type CmsListFilters } from '../repositories/CmsRepositor
 import type { CreateCmsInput, UpdateCmsInput } from '../schemas/cms.schema.js';
 import { sanitizeCmsMeta, toCmsPageResponse, toCmsPublicPageResponse, type CmsPageResponse, type CmsPublicPageResponse } from '../types/cms.types.js';
 import { BaseService } from './BaseService.js';
+import type { UpdateQuery } from 'mongoose';
+
+const CLEARABLE_TEXT_FIELDS = ['heading', 'subheading', 'imageUrl'] as const;
+
+function normalizeOptionalText(value: string | null | undefined): string | undefined {
+  if (value === null || value === undefined) {
+    return undefined;
+  }
+
+  const trimmed = value.trim();
+  return trimmed || undefined;
+}
+
+function buildCmsUpdateQuery(input: UpdateCmsInput, userId: string, publishedAt: Date | null | undefined): UpdateQuery<ICmsPage> {
+  const set: Record<string, unknown> = {
+    updatedBy: userId,
+  };
+
+  if (publishedAt !== undefined) {
+    set.publishedAt = publishedAt;
+  }
+
+  if (input.section !== undefined) set.section = input.section;
+  if (input.slug !== undefined) set.slug = input.slug.toLowerCase();
+  if (input.body !== undefined) set.body = input.body;
+  if (input.status !== undefined) set.status = input.status;
+  if (input.sortOrder !== undefined) set.sortOrder = input.sortOrder;
+  if (input.title !== undefined) set.title = input.title.trim();
+
+  if (input.meta !== undefined) {
+    set.meta = sanitizeCmsMeta(input.meta);
+  }
+
+  const unset: Record<string, 1> = {};
+
+  for (const field of CLEARABLE_TEXT_FIELDS) {
+    if (input[field] === undefined) {
+      continue;
+    }
+
+    const normalized = normalizeOptionalText(input[field]);
+
+    if (normalized) {
+      set[field] = normalized;
+    } else {
+      unset[field] = 1;
+    }
+  }
+
+  const updateQuery: UpdateQuery<ICmsPage> = { $set: set };
+
+  if (Object.keys(unset).length > 0) {
+    updateQuery.$unset = unset;
+  }
+
+  return updateQuery;
+}
 
 export class CmsService extends BaseService<ICmsPage> {
   constructor() {
@@ -41,8 +98,11 @@ export class CmsService extends BaseService<ICmsPage> {
 
     const page = await cmsRepository.create({
       ...input,
+      title: input.title.trim(),
       slug: input.slug.toLowerCase(),
-      imageUrl: input.imageUrl || undefined,
+      heading: normalizeOptionalText(input.heading),
+      subheading: normalizeOptionalText(input.subheading),
+      imageUrl: normalizeOptionalText(input.imageUrl),
       meta: sanitizeCmsMeta(input.meta),
       publishedAt,
       createdBy: userId,
@@ -75,14 +135,7 @@ export class CmsService extends BaseService<ICmsPage> {
 
     const page = await cmsRepository.updateByIdOrFail(
       id,
-      {
-        ...input,
-        ...(input.slug ? { slug: input.slug.toLowerCase() } : {}),
-        ...(input.imageUrl !== undefined ? { imageUrl: input.imageUrl || undefined } : {}),
-        ...(input.meta !== undefined ? { meta: sanitizeCmsMeta(input.meta) } : {}),
-        publishedAt,
-        updatedBy: userId,
-      },
+      buildCmsUpdateQuery(input, userId, publishedAt),
       'CMS page not found',
     );
 

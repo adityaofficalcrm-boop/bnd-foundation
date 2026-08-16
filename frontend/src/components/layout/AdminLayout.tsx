@@ -32,7 +32,12 @@ export function AdminLayout() {
               </SheetTrigger>
             }
           />
-          <SheetContent side="left" className="w-[var(--width-sidebar)] p-0 lg:hidden">
+          <SheetContent
+            side="left"
+            className="w-[var(--width-sidebar)] p-0 lg:hidden"
+            title="Admin navigation"
+            description="Admin panel sidebar navigation"
+          >
             <SidebarBrand />
             <SidebarNav onNavigate={() => setMobileOpen(false)} />
           </SheetContent>

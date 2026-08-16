@@ -1,6 +1,7 @@
 import { MailIcon, MapPinIcon, PhoneIcon } from 'lucide-react';
 import type { CmsPublicPage } from '@/features/public-cms/types/public-cms.types';
 import { CmsBodyContent } from '@/features/public-cms/components/CmsBodyContent';
+import { resolveCmsHeroDisplay, resolveCmsHeroImageAlt } from '@/features/public-cms/utils/resolve-cms-display';
 import { cn } from '@/lib/utils';
 
 type PublicCmsHeroProps = {
@@ -9,25 +10,30 @@ type PublicCmsHeroProps = {
 };
 
 export function PublicCmsHero({ entry, className }: PublicCmsHeroProps) {
+  const { eyebrow, title, subheading } = resolveCmsHeroDisplay(entry);
+  const imageAlt = resolveCmsHeroImageAlt(entry);
+
   return (
     <section
       className={cn(
-        'relative overflow-hidden rounded-2xl border border-primary/10 bg-gradient-to-br from-primary via-primary to-[#0a3d66] text-primary-foreground shadow-elevated',
+        'relative overflow-hidden rounded-2xl border border-primary/10 bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-foreground shadow-elevated',
         className,
       )}
     >
       <div className="pointer-events-none absolute -top-16 -right-16 size-64 rounded-full bg-white/5" aria-hidden="true" />
       <div className="relative grid gap-8 p-6 md:p-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
         <div className="space-y-4">
-          {entry.heading ? (
+          {eyebrow ? (
             <p className="text-sm font-medium tracking-wide text-primary-foreground/80 uppercase">
-              {entry.heading}
+              {eyebrow}
             </p>
           ) : null}
-          <h1 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">{entry.title}</h1>
-          {entry.subheading ? (
+          {title ? (
+            <h1 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl">{title}</h1>
+          ) : null}
+          {subheading ? (
             <p className="max-w-2xl text-base leading-relaxed text-primary-foreground/90 md:text-lg">
-              {entry.subheading}
+              {subheading}
             </p>
           ) : null}
           <CmsBodyContent body={entry.body} className="text-primary-foreground/85" />
@@ -36,7 +42,7 @@ export function PublicCmsHero({ entry, className }: PublicCmsHeroProps) {
           <div className="overflow-hidden rounded-xl border border-white/15 bg-white/5">
             <img
               src={entry.imageUrl}
-              alt={entry.title}
+              alt={imageAlt}
               className="aspect-[4/3] w-full object-cover"
               loading="eager"
             />

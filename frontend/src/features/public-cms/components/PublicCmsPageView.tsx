@@ -5,6 +5,7 @@ import {
   PublicCmsContentBlock,
   PublicCmsHero,
 } from '@/features/public-cms/components/PublicCmsContent';
+import { filterPublicContentEntries } from '@/features/public-cms/utils/cms-entry-filters';
 import { usePublicCmsSection } from '@/features/public-cms/hooks/usePublicCmsQueries';
 
 type PublicCmsPageViewProps = {
@@ -14,7 +15,7 @@ type PublicCmsPageViewProps = {
 
 export function PublicCmsPageView({ section, variant = 'default' }: PublicCmsPageViewProps) {
   const { data, isLoading, isError, refetch } = usePublicCmsSection(section);
-  const entries = data ?? [];
+  const entries = filterPublicContentEntries(data ?? []);
 
   return (
     <PublicCmsState

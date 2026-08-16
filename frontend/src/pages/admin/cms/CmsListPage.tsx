@@ -9,6 +9,7 @@ import {
   ConfirmDialog,
   LoadingSkeleton,
   PageHeader,
+  toast,
   type AppTableColumn,
 } from '@/components/app';
 import {
@@ -21,6 +22,7 @@ import {
   type CmsStatus,
 } from '@/features/cms/types/cms.types';
 import { useCmsList, useDeleteCmsPage } from '@/features/cms/hooks/useCmsQueries';
+import { getApiErrorMessage } from '@/lib/api-errors';
 import { cn } from '@/lib/utils';
 
 const sectionFilterOptions = [
@@ -54,9 +56,35 @@ function StatusPill({ status }: { status: CmsStatus }) {
   );
 }
 
-export function CmsListPage() {
-  const [search, setSearch] = useState('');
-  const [section, setSection] = useState<string>('ALL');
+export type CmsListPageProps = {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  breadcrumbLabel?: string;
+  tableTitle?: string;
+  tableDescription?: string;
+  emptyTitle?: string;
+  emptyDescription?: string;
+  createLabel?: string;
+  defaultSearch?: string;
+  defaultSection?: string;
+};
+
+export function CmsListPage({
+  eyebrow = 'Content management',
+  title = 'CMS pages',
+  description = 'Manage dynamic website content for home, about, mission, contact, and footer sections.',
+  breadcrumbLabel = 'CMS',
+  tableTitle = 'All content entries',
+  tableDescription = 'Draft and published content across all CMS sections.',
+  emptyTitle = 'No CMS content yet',
+  emptyDescription = 'Create your first content entry to populate the foundation website.',
+  createLabel = 'Create content',
+  defaultSearch = '',
+  defaultSection = 'ALL',
+}: CmsListPageProps = {}) {
+  const [search, setSearch] = useState(defaultSearch);
+  const [section, setSection] = useState<string>(defaultSection);
   const [status, setStatus] = useState<string>('ALL');
   const [page, setPage] = useState(1);
   const [deleteTarget, setDeleteTarget] = useState<CmsPage | null>(null);
@@ -129,18 +157,18 @@ export function CmsListPage() {
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Content management"
-        title="CMS pages"
-        description="Manage dynamic website content for home, about, mission, contact, and footer sections."
+        eyebrow={eyebrow}
+        title={title}
+        description={description}
         breadcrumbs={[
           { label: 'Admin', href: '/admin' },
-          { label: 'CMS' },
+          { label: breadcrumbLabel },
         ]}
         actions={
           <AppButton asChild>
             <Link to="/admin/cms/new">
               <PlusIcon className="size-4" />
-              Create content
+              {createLabel}
             </Link>
           </AppButton>
         }
@@ -184,14 +212,14 @@ export function CmsListPage() {
         </div>
       ) : (
         <AppTable
-          title="All content entries"
-          description="Draft and published content across all CMS sections."
+          title={tableTitle}
+          description={tableDescription}
           columns={columns}
           data={data?.pages ?? []}
           getRowKey={(row) => row.id}
           emptyIcon={FileTextIcon}
-          emptyTitle="No CMS content yet"
-          emptyDescription="Create your first content entry to populate the foundation website."
+          emptyTitle={emptyTitle}
+          emptyDescription={emptyDescription}
           footer={
             pagination ? (
               <>
@@ -236,8 +264,14 @@ export function CmsListPage() {
         isLoading={deleteMutation.isPending}
         onConfirm={async () => {
           if (!deleteTarget) return;
-          await deleteMutation.mutateAsync(deleteTarget.id);
-          setDeleteTarget(null);
+
+          try {
+            await deleteMutation.mutateAsync(deleteTarget.id);
+            toast.success('Content deleted successfully.');
+            setDeleteTarget(null);
+          } catch (error) {
+            toast.error(getApiErrorMessage(error, 'Failed to delete content.'));
+          }
         }}
       />
     </div>

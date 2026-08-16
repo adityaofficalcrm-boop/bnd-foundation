@@ -22,5 +22,13 @@ export function useAdminBreadcrumbs(): BreadcrumbItem[] {
     }
   }
 
+  if (pathname.startsWith('/admin/contact')) {
+    return [{ label: 'Admin', href: '/admin' }, { label: 'Contact' }];
+  }
+
+  if (pathname.startsWith('/admin/team')) {
+    return [{ label: 'Admin', href: '/admin' }, { label: 'Team' }];
+  }
+
   return [{ label: 'Admin', href: '/admin' }, { label: 'Dashboard', href: '/admin' }];
 }

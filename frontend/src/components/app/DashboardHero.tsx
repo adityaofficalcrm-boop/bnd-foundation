@@ -31,7 +31,7 @@ function DashboardHero({
   return (
     <section
       className={cn(
-        'relative overflow-hidden rounded-2xl border border-primary/10 bg-gradient-to-br from-primary via-primary to-[#0a3d66] text-primary-foreground shadow-elevated',
+        'relative overflow-hidden rounded-2xl border border-primary/10 bg-gradient-to-br from-primary via-primary to-primary-dark text-primary-foreground shadow-elevated',
         className,
       )}
       aria-labelledby="dashboard-hero-title"

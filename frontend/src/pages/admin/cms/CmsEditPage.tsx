@@ -1,8 +1,9 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { AppButton, LoadingSkeleton, PageHeader } from '@/components/app';
+import { AppButton, LoadingSkeleton, PageHeader, toast } from '@/components/app';
 import { CmsForm } from '@/features/cms/components/CmsForm';
 import { useCmsPage, useUpdateCmsPage } from '@/features/cms/hooks/useCmsQueries';
-import { cmsPageToFormValues, toCmsPayload, type CmsFormValues } from '@/features/cms/schemas/cms.schema';
+import { cmsPageToFormValues, toCmsUpdatePayload, type CmsFormValues } from '@/features/cms/schemas/cms.schema';
+import { getApiErrorMessage } from '@/lib/api-errors';
 
 export function CmsEditPage() {
   const { id } = useParams<{ id: string }>();
@@ -11,8 +12,13 @@ export function CmsEditPage() {
   const updateMutation = useUpdateCmsPage(id ?? '');
 
   const handleSubmit = async (values: CmsFormValues) => {
-    await updateMutation.mutateAsync(toCmsPayload(values));
-    navigate('/admin/cms');
+    try {
+      await updateMutation.mutateAsync(toCmsUpdatePayload(values));
+      toast.success('Content updated successfully.');
+      navigate('/admin/cms');
+    } catch (error) {
+      toast.error(getApiErrorMessage(error, 'Failed to update content.'));
+    }
   };
 
   if (isLoading) {
@@ -46,6 +52,7 @@ export function CmsEditPage() {
       />
 
       <CmsForm
+        key={page.id}
         defaultValues={cmsPageToFormValues(page)}
         submitLabel="Save changes"
         isSubmitting={updateMutation.isPending}

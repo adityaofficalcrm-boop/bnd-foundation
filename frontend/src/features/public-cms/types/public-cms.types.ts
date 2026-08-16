@@ -10,6 +10,16 @@ export interface CmsPublicPage {
   body: string;
   imageUrl?: string;
   meta?: CmsMeta;
+  /** Optional per-locale CMS copy (admin-managed). */
+  i18n?: {
+    ne?: {
+      title?: string;
+      heading?: string;
+      subheading?: string;
+      body?: string;
+      meta?: Partial<Pick<CmsMeta, 'ctaLabel' | 'role' | 'group' | 'location' | 'grantProvider'>>;
+    };
+  };
   sortOrder: number;
   publishedAt: string | null;
   createdAt: string;

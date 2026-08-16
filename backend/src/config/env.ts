@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+const emptyToUndefined = (value: unknown) =>
+  typeof value === 'string' && value.trim() === '' ? undefined : value;
+
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.coerce.number().int().positive().default(5000),
@@ -15,6 +18,10 @@ const envSchema = z.object({
   SEED_SUPER_ADMIN_PASSWORD: z.string().min(8).optional(),
   SEED_SUPER_ADMIN_FIRST_NAME: z.string().min(1).optional(),
   SEED_SUPER_ADMIN_LAST_NAME: z.string().min(1).optional(),
+  RECAPTCHA_SECRET_KEY: z.preprocess(emptyToUndefined, z.string().min(1).optional()),
+  STRIPE_SECRET_KEY: z.preprocess(emptyToUndefined, z.string().min(1).optional()),
+  STRIPE_WEBHOOK_SECRET: z.preprocess(emptyToUndefined, z.string().min(1).optional()),
+  FRONTEND_URL: z.string().url().default('http://localhost:5173'),
 });
 
 export type Env = z.infer<typeof envSchema>;

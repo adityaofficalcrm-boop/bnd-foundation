@@ -8,4 +8,5 @@ coverage
 .vscode
 .DS_Store
 *.tsbuildinfo
-.turbo
+uploads/
+backend/uploads/

@@ -37,6 +37,15 @@ export interface CmsMeta {
   socialTwitter?: string;
   socialInstagram?: string;
   socialLinkedin?: string;
+  socialYoutube?: string;
+  supportCredit?: string;
+  role?: string;
+  group?: string;
+  amount?: string;
+  location?: string;
+  ctaLabel?: string;
+  ctaUrl?: string;
+  grantProvider?: string;
 }
 
 export interface CmsPage {
@@ -88,10 +97,10 @@ export interface CreateCmsPayload {
   section: CmsSection;
   title: string;
   slug: string;
-  heading?: string;
-  subheading?: string;
+  heading?: string | null;
+  subheading?: string | null;
   body: string;
-  imageUrl?: string;
+  imageUrl?: string | null;
   meta?: CmsMeta;
   status: CmsStatus;
   sortOrder: number;
